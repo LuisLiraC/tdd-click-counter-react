@@ -30,7 +30,7 @@ describe('Counter display', () => {
     expect(counterDisplay.length).toBe(1)
   })
 
-  test('counter starts a 0', () => {
+  test('counter starts at 0', () => {
     const wrapper = setup()
     const count = findByTestAtrr(wrapper, 'count').text()
     expect(count).toBe('0')
@@ -82,34 +82,33 @@ describe('Decrement', () => {
       const errorHasHiddenClass = errorDiv.hasClass('hidden')
       expect(errorHasHiddenClass).toBe(true)
     })
-  })
+    describe('Counter is 0 and decrement is clicked', () => {
+      let wrapper
+      beforeEach(() => {
+        wrapper = setup()
+        const decrementButton = findByTestAtrr(wrapper, 'decrement-button')
+        decrementButton.simulate('click')
+      })
 
-  describe('Counter is 0 and decrement is clicked', () => {
-    let wrapper
-    beforeEach(() => {
-      wrapper = setup()
-      const decrementButton = findByTestAtrr(wrapper, 'decrement-button')
-      decrementButton.simulate('click')
-    })
+      test('error shows', () => {
+        const errorDiv = findByTestAtrr(wrapper, 'error-message')
+        const errorHasHiddenClass = errorDiv.hasClass('hidden')
+        expect(errorHasHiddenClass).toBe(false)
+      })
 
-    test('error shows', () => {
-      const errorDiv = findByTestAtrr(wrapper, 'error-message')
-      const errorHasHiddenClass = errorDiv.hasClass('hidden')
-      expect(errorHasHiddenClass).toBe(false)
-    })
+      test('counter still displays 0', () => {
+        const count = findByTestAtrr(wrapper, 'count').text()
+        expect(count).toBe('0')
+      })
 
-    test('counter still displays 0', () => {
-      const count = findByTestAtrr(wrapper, 'count').text()
-      expect(count).toBe('0')
-    })
+      test('clicking increment clears the error', () => {
+        const incrementButton = findByTestAtrr(wrapper, 'increment-button')
+        incrementButton.simulate('click')
 
-    test('clicking increment clears the error', () => {
-      const incrementButton = findByTestAtrr(wrapper, 'increment-button')
-      incrementButton.simulate('click')
-
-      const errorDiv = findByTestAtrr(wrapper, 'error-message')
-      const errorHasHiddenClass = errorDiv.hasClass('hidden')
-      expect(errorHasHiddenClass).toBe(true)
+        const errorDiv = findByTestAtrr(wrapper, 'error-message')
+        const errorHasHiddenClass = errorDiv.hasClass('hidden')
+        expect(errorHasHiddenClass).toBe(true)
+      })
     })
   })
 })
